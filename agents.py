@@ -6,6 +6,7 @@ from vector_store import query_vector_store
 from sentence_transformers import SentenceTransformer
 from pdf_reader import extract_text_from_pdf
 from text_splitter import split_text_into_chunks
+from text_read_split import pdf_read_split
 from embedder import generate_embeddings
 from vector_store import create_vector_store
 
@@ -31,24 +32,26 @@ class PDFQAAgent:
                 self.chunks, self.embeddings = pickle.load(f)
             self.index = faiss.read_index(self.index_path)
         else:
-            pdf_text = extract_text_from_pdf(pdf_path)
-            self.chunks = split_text_into_chunks(pdf_text)
+            #pdf_text = extract_text_from_pdf(pdf_path)
+            #self.chunks = split_text_into_chunks(pdf_text)
+            self.chunks = pdf_read_split(pdf_path)
             self.embeddings = generate_embeddings(self.chunks)
             self.index = create_vector_store(self.embeddings)
             with open(self.embeddings_path, 'wb') as f:
                 pickle.dump((self.chunks, self.embeddings), f)
             faiss.write_index(self.index, self.index_path)
+
         self.template = """You are a knowledgeable assistant who provides accurate answers based on the given context from the document Do not generate any outside information. Stick to the context exactly.
 
-        {context}
         {history}
+        {context}
         Question: {question}
         Answer:"""
 
     def handle_query(self, question, history):
         relevant_chunks = query_vector_store(question, self.embedding_model, self.index, self.chunks)
         context = " ".join(relevant_chunks)
-        print(context)
         formatted_prompt = self.template.format(context=context, question=question, history=history)
+        print(formatted_prompt)
         model = OllamaLLM(model="llama3.1")
         return model.invoke(formatted_prompt)

@@ -67,6 +67,7 @@ if question := st.chat_input("Ask 5eBot"):
 
     # Classify the query
     agent_name = classify_query(question)
+    print(agent_name)
     if agent_name == "general":
         response_content = general_agent_tool(question, full_history)
     else:
