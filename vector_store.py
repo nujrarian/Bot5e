@@ -8,7 +8,7 @@ def create_vector_store(embeddings):
     index.add(embeddings_np)
     return index
 
-def query_vector_store(query, model, index, chunks, top_k=5):
+def query_vector_store(query, model, index, chunks, top_k=7):
     query_embedding = model.encode([query], convert_to_tensor=True)
     query_embedding_np = np.array(query_embedding.cpu().numpy())
     distances, indices = index.search(query_embedding_np, top_k)

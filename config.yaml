@@ -1,0 +1,47 @@
+# Bot5e Configuration File
+
+# LLM Settings
+llm:
+  model: "llama3.1"
+  temperature: 0.7
+  ollama_base_url: "http://localhost:11434"  # Default Ollama endpoint
+
+# PDF and Document Processing
+documents:
+  pdf_path: "SRD-OGL_V5.1.pdf"
+  embeddings_path: "embeddings.pkl"
+  index_path: "index.faiss"
+
+# Text Processing
+text_processing:
+  chunk_size: 1000
+  chunk_overlap: 200
+
+# Embedding Settings
+embeddings:
+  model: "all-MiniLM-L6-v2"
+
+# Vector Store Settings
+vector_store:
+  top_k: 7  # Number of relevant chunks to retrieve
+
+# Classification Settings
+classifier:
+  model: "facebook/bart-large-mnli"
+  confidence_threshold: 0.6
+  labels:
+    - "casual greeting or non-D&D conversation"
+    - "question about D&D 5e rules, mechanics, classes, spells, or gameplay"
+
+# Logging Settings
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "bot5e.log"
+
+# Streamlit UI Settings
+ui:
+  page_title: "Bot5e - D&D 5e Assistant"
+  page_icon: "🐉"
+  show_agent_by_default: true
+  show_context_by_default: false
