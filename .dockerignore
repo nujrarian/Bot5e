@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+botenv/
+
+# Git & IDE
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Claude
+.claude/
+
+# Generated at runtime (regenerated on first container start)
+embeddings.pkl
+index.faiss
+
+# Logs
+*.log
+
+# RAGAS eval outputs
+eval_results.json
+eval_baseline.json
+eval_hybrid.json
+eval_rerank.json
+eval_cache_*.json

@@ -175,5 +175,8 @@ eval_hybrid.json
 eval_rerank.json
 eval_cache_*.json
 
+# Docker
+docker-compose.override.yaml
+
 # Claude Code
 .claude/
