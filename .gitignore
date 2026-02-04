@@ -168,5 +168,12 @@ index.faiss
 bot5e.log
 *.log
 
+# Evaluation outputs (generated, regenerate with evaluate.py)
+eval_results.json
+eval_baseline.json
+eval_hybrid.json
+eval_rerank.json
+eval_cache_*.json
+
 # Claude Code
 .claude/

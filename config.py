@@ -98,6 +98,16 @@ class Config:
         return self.get('vector_store.top_k', 7)
 
     @property
+    def retrieval_mode(self) -> str:
+        """Get retrieval mode: baseline, hybrid, or rerank."""
+        return self.get('vector_store.retrieval_mode', 'baseline')
+
+    @property
+    def reranker_model(self) -> str:
+        """Get reranker model name."""
+        return self.get('vector_store.reranker_model', 'cross-encoder/ms-marco-MiniLM-L-6-v2')
+
+    @property
     def classifier_model(self) -> str:
         """Get classifier model name."""
         return self.get('classifier.model', 'facebook/bart-large-mnli')

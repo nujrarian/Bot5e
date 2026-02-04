@@ -21,9 +21,11 @@ text_processing:
 embeddings:
   model: "all-MiniLM-L6-v2"
 
-# Vector Store Settings
+# Vector Store / Retrieval Settings
 vector_store:
   top_k: 7  # Number of relevant chunks to retrieve
+  retrieval_mode: "rerank"  # Options: baseline, hybrid, rerank
+  reranker_model: "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
 # Classification Settings
 classifier:

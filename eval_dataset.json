@@ -1,0 +1,127 @@
+[
+    {
+        "question": "What are the components required to cast Magic Missile?",
+        "ground_truth": "Magic Missile requires verbal (V) and somatic (S) components to cast.",
+        "category": "spells"
+    },
+    {
+        "question": "How much damage does each dart of Magic Missile deal?",
+        "ground_truth": "Each dart deals 1d4 + 1 force damage to its target.",
+        "category": "spells"
+    },
+    {
+        "question": "How many darts does Magic Missile create and how do they work?",
+        "ground_truth": "Magic Missile creates three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. The darts all strike simultaneously, and you can direct them to hit one creature or several.",
+        "category": "spells"
+    },
+    {
+        "question": "What is the range of Magic Missile?",
+        "ground_truth": "Magic Missile has a range of 120 feet.",
+        "category": "spells"
+    },
+    {
+        "question": "What level spell is Magic Missile and what school is it?",
+        "ground_truth": "Magic Missile is a 1st-level evocation spell.",
+        "category": "spells"
+    },
+    {
+        "question": "How much damage does Fireball deal and what type?",
+        "ground_truth": "Each creature in the area must make a Dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much on a successful one.",
+        "category": "spells"
+    },
+    {
+        "question": "What is the area of effect of Fireball?",
+        "ground_truth": "Fireball creates an explosion in a 20-foot-radius sphere centered on a point you choose within range.",
+        "category": "spells"
+    },
+    {
+        "question": "What components does Fireball require?",
+        "ground_truth": "Fireball requires verbal (V), somatic (S), and material (M) components. The material component is a tiny ball of bat guano and sulfur.",
+        "category": "spells"
+    },
+    {
+        "question": "What is the range of Fireball?",
+        "ground_truth": "Fireball has a range of 150 feet.",
+        "category": "spells"
+    },
+    {
+        "question": "How long does a short rest last and what can you do during one?",
+        "ground_truth": "A short rest is a period of downtime, at least 1 hour long, during which a character does nothing more strenuous than eating, drinking, reading, and tending to wounds.",
+        "category": "rest"
+    },
+    {
+        "question": "Can you recover hit points during a short rest?",
+        "ground_truth": "Yes. A character can spend one or more Hit Dice at the end of a short rest, up to the character's maximum number of Hit Dice, to regain hit points.",
+        "category": "rest"
+    },
+    {
+        "question": "How long does a long rest need to be and what counts as light activity?",
+        "ground_truth": "A long rest is a period of extended downtime, at least 8 hours long, during which a character sleeps or performs light activity: reading, talking, eating, or standing watch for no more than 2 hours.",
+        "category": "rest"
+    },
+    {
+        "question": "How is a character's proficiency bonus determined?",
+        "ground_truth": "Your proficiency bonus is always based on your total character level, as shown in the Character Advancement table, not your level in a particular class.",
+        "category": "core_rules"
+    },
+    {
+        "question": "What happens when you score a critical hit?",
+        "ground_truth": "When you score a critical hit, you get to roll extra dice for the attack's damage against the target. Roll all of the attack's damage dice twice and add them together to determine the attack's extra damage.",
+        "category": "combat"
+    },
+    {
+        "question": "What are death saving throws and when do you make them?",
+        "ground_truth": "Whenever you start your turn with 0 hit points, you must make a death saving throw. Unlike other saving throws, this one is not tied to any ability score. Roll a d20. If the roll is 10 or higher, you succeed. Otherwise, you fail.",
+        "category": "combat"
+    },
+    {
+        "question": "What happens when you fail three death saving throws?",
+        "ground_truth": "On your third failure, you die. The successes and failures do not need to be consecutive.",
+        "category": "combat"
+    },
+    {
+        "question": "What happens when you succeed on three death saving throws?",
+        "ground_truth": "On your third success, you become stable.",
+        "category": "combat"
+    },
+    {
+        "question": "How does advantage work when making a roll?",
+        "ground_truth": "When you have advantage on a roll, you roll a second d20 when you make the roll and use the higher of the two rolls.",
+        "category": "core_rules"
+    },
+    {
+        "question": "How does disadvantage work when making a roll?",
+        "ground_truth": "When you have disadvantage on a roll, you roll a second d20 and use the lower of the two rolls.",
+        "category": "core_rules"
+    },
+    {
+        "question": "Can you have both advantage and disadvantage at the same time, and if so what happens?",
+        "ground_truth": "If you have both advantage and disadvantage on a roll, they cancel each other out, and you roll a single d20 as normal.",
+        "category": "core_rules"
+    },
+    {
+        "question": "How do you escape a grapple?",
+        "ground_truth": "A grappled creature can use its action to escape. To do so, it must succeed on a Strength (Athletics) or Dexterity (Acrobatics) check contested by your Strength (Athletics) check.",
+        "category": "combat"
+    },
+    {
+        "question": "How does the Help action work?",
+        "ground_truth": "When you use the Help action, you assist another creature in the performance of a task. A character can only provide help if the task is one that they could attempt alone.",
+        "category": "combat"
+    },
+    {
+        "question": "What is the casting time and duration of Magic Missile?",
+        "ground_truth": "Magic Missile has a casting time of 1 action and an instantaneous duration.",
+        "category": "spells"
+    },
+    {
+        "question": "What is the casting time and duration of Fireball?",
+        "ground_truth": "Fireball has a casting time of 1 action and an instantaneous duration.",
+        "category": "spells"
+    },
+    {
+        "question": "What happens when you cast Magic Missile using a higher level spell slot?",
+        "ground_truth": "When you cast Magic Missile using a spell slot of 2nd level or higher, you create one additional dart for each slot level above 1st.",
+        "category": "spells"
+    }
+]

@@ -87,20 +87,22 @@ class PDFQAAgent:
             logger.error(f"Failed to initialize PDFQAAgent: {e}")
             raise
 
-    def _generate_embeddings(self, pdf_path):
-        """Generate and save embeddings from PDF."""
-        try:
-            self.chunks = pdf_read_split(pdf_path, config.chunk_size, config.chunk_overlap)
-            self.embeddings = generate_embeddings(self.chunks)
-            self.index = create_vector_store(self.embeddings)
-            logger.info("Saving embeddings and index to disk")
-            with open(self.embeddings_path, 'wb') as f:
-                pickle.dump((self.chunks, self.embeddings), f)
-            faiss.write_index(self.index, self.index_path)
-            logger.info(f"Saved {len(self.chunks)} chunks to cache")
-        except Exception as e:
-            logger.error(f"Failed to generate embeddings: {e}")
-            raise
+        # Set up retrieval components based on mode
+        self.retrieval_mode = config.retrieval_mode
+        self.bm25_index = None
+        self.reranker = None
+
+        if self.retrieval_mode in ("hybrid", "rerank"):
+            from hybrid_search import build_bm25_index
+            logger.info("Building BM25 index for hybrid search")
+            self.bm25_index = build_bm25_index(self.chunks)
+
+        if self.retrieval_mode == "rerank":
+            from reranker import load_reranker
+            logger.info(f"Loading reranker: {config.reranker_model}")
+            self.reranker = load_reranker()
+
+        logger.info(f"Retrieval mode: {self.retrieval_mode}")
 
         self.template = """You are a D&D 5th Edition rules expert. Answer ONLY based on the context provided from the official D&D 5e rulebook.
 
@@ -121,17 +123,41 @@ class PDFQAAgent:
 
         Answer (based ONLY on the context above):"""
 
+    def _generate_embeddings(self, pdf_path):
+        """Generate and save embeddings from PDF."""
+        try:
+            self.chunks = pdf_read_split(pdf_path, config.chunk_size, config.chunk_overlap)
+            self.embeddings = generate_embeddings(self.chunks)
+            self.index = create_vector_store(self.embeddings)
+            logger.info("Saving embeddings and index to disk")
+            with open(self.embeddings_path, 'wb') as f:
+                pickle.dump((self.chunks, self.embeddings), f)
+            faiss.write_index(self.index, self.index_path)
+            logger.info(f"Saved {len(self.chunks)} chunks to cache")
+        except Exception as e:
+            logger.error(f"Failed to generate embeddings: {e}")
+            raise
+
+    def _retrieve(self, question):
+        """Retrieve relevant chunks using the configured retrieval mode."""
+        if self.retrieval_mode == "baseline":
+            return query_vector_store(question, self.embedding_model, self.index, self.chunks, top_k=config.top_k)
+
+        if self.retrieval_mode == "hybrid":
+            from hybrid_search import hybrid_retrieve
+            return hybrid_retrieve(question, self.embedding_model, self.index, self.chunks, self.bm25_index, top_k=config.top_k)
+
+        # rerank: hybrid retrieval with more candidates, then cross-encoder reranking
+        from hybrid_search import hybrid_retrieve
+        from reranker import rerank_chunks
+        candidates = hybrid_retrieve(question, self.embedding_model, self.index, self.chunks, self.bm25_index, top_k=config.top_k * 2)
+        return rerank_chunks(question, candidates, self.reranker, top_k=config.top_k)
+
     def handle_query(self, question, history):
         logger.debug(f"PDFQAAgent handling query: {question[:50]}...")
 
         try:
-            relevant_chunks = query_vector_store(
-                question,
-                self.embedding_model,
-                self.index,
-                self.chunks,
-                top_k=config.top_k
-            )
+            relevant_chunks = self._retrieve(question)
 
             logger.debug(f"Retrieved {len(relevant_chunks)} relevant chunks")
             context = "\n\n---\n\n".join(relevant_chunks)

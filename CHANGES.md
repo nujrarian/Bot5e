@@ -287,6 +287,66 @@ If you were using the old version:
 
 ---
 
+---
+
+### 11. ✅ RAGAS Evaluation Pipeline
+
+**New Files:**
+- [evaluate.py](evaluate.py): Three-phase evaluation pipeline (retrieve → answer → score)
+- [eval_dataset.json](eval_dataset.json): 25 ground-truth Q&A pairs across spells, rest, combat, core_rules
+
+**Features:**
+- Phase 1 caching (`eval_cache_{mode}.json`) avoids re-running LLM calls
+- Local Ollama LLM as RAGAS judge (max_workers=1 for stability)
+- CLI: `--mode baseline|hybrid|rerank --output FILE`
+
+---
+
+### 12. ✅ Hybrid Search (BM25 + FAISS with RRF)
+
+**New File:** [hybrid_search.py](hybrid_search.py)
+
+- BM25Okapi lexical search merged with FAISS semantic search
+- Reciprocal Rank Fusion (k=60) combines ranked lists
+- Fetches 2× candidates from each retriever before merging
+
+---
+
+### 13. ✅ Cross-Encoder Reranking
+
+**New File:** [reranker.py](reranker.py)
+
+- cross-encoder/ms-marco-MiniLM-L-6-v2 re-scores (query, chunk) pairs
+- Applied after hybrid retrieval on 2× top_k candidates
+- Configurable via `config.yaml` (`vector_store.reranker_model`)
+
+---
+
+### 14. ✅ Retrieval Mode Integration
+
+**Changes in [agents.py](agents.py):**
+- Added `_retrieve()` method dispatching based on `config.retrieval_mode`
+- BM25 index and cross-encoder loaded once at init, reused per query
+
+**Changes in [config.yaml](config.yaml) / [config.py](config.py):**
+- Added `vector_store.retrieval_mode` (baseline | hybrid | rerank)
+- Added `vector_store.reranker_model`
+
+---
+
+### 15. ✅ RAGAS Evaluation Results
+
+| Metric | Baseline (FAISS) | Hybrid (BM25+FAISS) | Rerank (Hybrid+CE) |
+|---|---|---|---|
+| faithfulness | 0.8658 | 0.8433 | **0.8801** |
+| answer_relevancy | 0.7874 | 0.7810 | **0.7982** |
+| context_precision | 0.7722 | 0.7395 | **0.8546** |
+| context_recall | **0.9400** | 0.9100 | 0.8917 |
+
+**Winner: rerank** — highest faithfulness, answer_relevancy, and context_precision (+8.2pp over baseline). Context recall drops slightly because the cross-encoder is more selective, surfacing fewer but more precisely relevant chunks. Default `retrieval_mode` set to `rerank`.
+
+---
+
 ## Next Steps / Future Improvements
 
 While all critical issues have been addressed, here are some potential future enhancements:
